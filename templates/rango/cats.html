@@ -1,0 +1,10 @@
+{% if cats %}
+    <ul class="list-group">
+    {% for c in cats %}
+        {% if c == act_cat %}<li class="list-group-item list-group-item-info"> {% else  %} <li class="list-group-item">{% endif %}
+        <a href="{% url 'category'  c.slug %}">{{ c.name }}</a></li>
+        {% endfor %}
+{% else %}
+    <li> <strong >There are no category present.</strong></li>
+    </ul>
+{% endif %}
