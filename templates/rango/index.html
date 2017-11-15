@@ -1,45 +1,33 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Rango</title>
-    </head>
+{% extends 'base.html' %}
 
-    <body>
-        {% if user.is_authenticated %}
-        <h1>Rango says... hello {{ user.username }}!</h1>
-        {% else %}
-        <h1>Rango says... hello world!</h1>
-        {% endif %}
+{% load staticfiles %}
 
-        {% if categories and user.is_authenticated %}
-            <ul>
-                {% for category in categories %}
-                <li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no categories present.</strong><br />
-        {% endif %}
+{% block title %}Index{% endblock %}
 
-        {% if pages and user.is_authenticated %}
-            <ul>
-                {% for page in pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no pages present.</strong><br />
-        {% endif %}
+{% block body_block %}
+    {% if user.is_authenticated %}
+    <h1>Rango says... hello {{ user.username }}!</h1>
+    {% else %}
+    <h1>Rango says... hello world!</h1>
+    {% endif %}
 
-        {% if user.is_authenticated %}
-        <a href="/rango/restricted/">Restricted Page</a><br />
-        <a href="/rango/logout/">Logout</a><br />
-        {% else %}
-        <a href="/rango/register/">Register Here</a><br />
-        <a href="/rango/login/">Login</a><br />
-        {% endif %}
+    {% if categories and user.is_authenticated %}
+        <ul>
+            {% for category in categories %}
+            <li><a href="{% url 'category' category.slug %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no categories present.</strong><br />
+    {% endif %}
 
-        <a href="/rango/about/">About</a><br/>
-        <a href="/rango/add_category/">Add a New Category</a><br />
-    </body>
-</html>
+    {% if pages and user.is_authenticated %}
+        <ul>
+            {% for page in pages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no pages present.</strong><br />
+    {% endif %}
+{% endblock %}
