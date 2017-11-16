@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<user_id>[\w]+)/$', views.profile, name='profile'),
     url(r'^users/$', views.users, name='users'),
     url(r'^like_category/$', views.like_category, name='like_category'),
+    url(r'^suggest_category/$', views.suggest_category, name='suggest_category'),
 )
