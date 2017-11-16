@@ -17,5 +17,7 @@
     {% endif %}
 </div>
 
+{% if curr_user == user %}
 <a href="{% url 'register_profile' %}" class="btn btn-primary">Edit</a>
+{% endif %}
 {% endblock %}

@@ -175,7 +175,7 @@ def register_profile(request):
             user_profile_form.save(commit=True)
         else:
             print user_profile_form.errors
-        return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile})
+        return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile, 'curr_user': user})
     else:
         user_profile_form = UserProfileForm(initial=model_to_dict(user_profile))
         return render(request, 'rango/profile_registration.html',
@@ -183,7 +183,13 @@ def register_profile(request):
 
 
 @login_required
-def profile(request):
-    user = User.objects.get(id=request.user.id)
-    user_profile = UserProfile.objects.get(user_id=request.user.id)
-    return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile})
+def profile(request, user_id):
+    curr_user = request.user
+    user = User.objects.get(id=user_id)
+    user_profile = UserProfile.objects.get(user_id=user.id)
+    return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile, 'curr_user': curr_user})
+
+
+@login_required
+def users(request):
+    return render(request, 'rango/users.html', {'users': User.objects.all(), 'curr_user': request.user})

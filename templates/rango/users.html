@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block body_block %}
+<h1>Users</h1>
+{% if users %}
+<ul class="list-group">
+    {% for user in users %}
+    {% if user == curr_user %}
+        <li class="list-group-item list-group-item-info"><a href="{% url 'profile' user.id %}">{{ user.username }}</a></li>
+    {% else %}
+        <li class="list-group-item"><a href="{% url 'profile' user.id %}">{{ user.username }}</a></li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
