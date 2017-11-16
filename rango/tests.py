@@ -1,7 +1,10 @@
+from datetime import timedelta
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
-from rango.models import Category
+from rango.models import Category, Page
 
 
 class CategoryMethodTests(TestCase):
@@ -22,6 +25,38 @@ class CategoryMethodTests(TestCase):
         cat = Category(name='Random Category String')
         cat.save()
         self.assertEqual(cat.slug, 'random-category-string')
+
+
+class PageMethodTests(TestCase):
+
+    def test_last_visit_and_first_visit_not_in_future(self):
+        """
+        last_visit and first_visit should not have dates set to the future
+        """
+        page = Page(category_id=1,
+                    title="test",
+                    url="http://www.test.com",
+                    views=0,
+                    last_visit=timezone.now() + timedelta(days=1),
+                    first_visit=timezone.now() + timedelta(days=2)
+                    )
+        page.save()
+        self.assertLessEqual(page.last_visit, timezone.now())
+        self.assertLessEqual(page.first_visit, timezone.now())
+
+    def test_last_visit_happens_after_first_visit(self):
+        """
+        last_visit and first_visit should not have dates set to the future
+        """
+        page = Page(category_id=1,
+                    title="test",
+                    url="http://www.test.com",
+                    views=0,
+                    last_visit=timezone.now() - timedelta(days=2),
+                    first_visit=timezone.now() - timedelta(days=1)
+                    )
+        page.save()
+        self.assertLessEqual(page.first_visit, page.last_visit)
 
 
 class IndexViewTests(TestCase):

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -14,11 +15,12 @@ class Category(models.Model):
         # if self.id is None:
         # self.slug = slugify(self.name)
         self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
 
         # Prevent from having negative views
         if self.views < 0:
             self.views = 0
+
+        super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
@@ -32,6 +34,19 @@ class Page(models.Model):
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(null=True, default=None)
+    first_visit = models.DateTimeField(null=True, default=None)
+
+    def save(self, *args, **kwargs):
+        # first_visit <= last_visit <= now
+        now = timezone.now()
+        if self.last_visit > now:
+            self.last_visit = now
+        if self.first_visit > now:
+            self.first_visit = now
+        if self.first_visit > self.last_visit:
+            self.first_visit = self.last_visit
+        super(Page, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title

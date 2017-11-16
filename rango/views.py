@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from rango.forms import CategoryForm, PageForm, UserProfileForm
 from rango.models import Category, Page, UserProfile
@@ -136,6 +137,8 @@ def add_page(request, category_name_slug):
                 page = form.save(commit=False)
                 page.category = cat
                 page.views = 0
+                page.first_visit = None
+                page.last_visit = None
                 page.save()
                 # probably better to use a redirect here.
                 return category(request, category_name_slug)
@@ -156,6 +159,9 @@ def track_url(request):
             page_id = request.GET['page_id']
             page = Page.objects.get(id=page_id)
             page.views += 1
+            if page.first_visit is None:
+                page.first_visit = timezone.now()
+            page.last_visit = timezone.now()
             page.save()
             return redirect(page.url)
         else:
