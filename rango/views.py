@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from rango.forms import CategoryForm, PageForm, UserProfileForm
@@ -189,3 +190,18 @@ def profile(request, user_id):
 @login_required
 def users(request):
     return render(request, 'rango/users.html', {'users': User.objects.all(), 'curr_user': request.user})
+
+
+@login_required
+def like_category(request):
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+    likes = 0
+    if cat_id:
+        cat = Category.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+    return HttpResponse(likes)

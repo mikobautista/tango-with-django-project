@@ -16,7 +16,9 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-<a class="btn btn-primary" href="{% url 'add_page' category.slug %}">Add a Page</a>
+<p><strong id="like_count">{{ category.likes }}</strong> people like this category.</p>
+<button class="btn btn-default glyphicon glyphicon-hand-up" data-catid="{{ category.id }}" id="like"></button>
+<a class="btn btn-default" href="{% url 'add_page' category.slug %}">Add a Page</a>
 {% endif %}
 {% else %}
 The specified category {{ category_name }} does not exist!
