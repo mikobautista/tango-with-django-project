@@ -226,3 +226,19 @@ def suggest_category(request):
 
     cats = get_category_list(8, starts_with)
     return render(request, 'rango/cats.html', {'cats': cats})
+
+
+@login_required
+def auto_add_page(request):
+    context_dict = {}
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+        url = request.GET['url']
+        title = request.GET['title']
+        if cat_id:
+            cat = Category.objects.get(id=int(cat_id))
+            Page.objects.get_or_create(category=cat, title=title, url=url)
+            pages = Page.objects.filter(category=cat).order_by('-views')
+            # Adds our results list to the template context under name pages.
+            context_dict['pages'] = pages
+    return render(request, 'rango/page_list.html', context_dict)

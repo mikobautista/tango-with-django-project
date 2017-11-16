@@ -14,7 +14,6 @@ def run_query(search_term):
         url = result['thread']['url']
         site = result['thread']['site']
         site_full = result['thread']['site_full']
-        print site_full
         results.append({'title': title, 'url': url, 'site': site, 'site_full': site_full})
 
     return results
