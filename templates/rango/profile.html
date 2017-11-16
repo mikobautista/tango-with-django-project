@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body_block %}
+<div class="page-header">
+    <h1>Profile</h1>
+</div>
+<div>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Website:</strong> {{ user_profile.website }}</p>
+    {% if user_profile.picture %}
+    <p><strong>Picture:</strong> <img src="../../media/{{ user_profile.picture }}" height="42" width="42"></p>
+    {% endif %}
+</div>
+
+<a href="{% url 'register_profile' %}" class="btn btn-primary">Edit</a>
+{% endblock %}

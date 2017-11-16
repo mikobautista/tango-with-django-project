@@ -1,11 +1,13 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from rango.forms import CategoryForm, PageForm
-from rango.models import Category, Page
+from rango.forms import CategoryForm, PageForm, UserProfileForm, UserForm
+from rango.models import Category, Page, UserProfile
 from rango.webhoseio_search import run_query
 
 
@@ -161,3 +163,27 @@ def track_url(request):
             return redirect(page.url)
         else:
             return index(request)
+
+
+@login_required
+def register_profile(request):
+    user = User.objects.get(id=request.user.id)
+    user_profile, _ = UserProfile.objects.get_or_create(user_id=request.user.id)
+    if request.method == 'POST':
+        user_profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if user_profile_form.is_valid():
+            user_profile_form.save(commit=True)
+        else:
+            print user_profile_form.errors
+        return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile})
+    else:
+        user_profile_form = UserProfileForm(initial=model_to_dict(user_profile))
+        return render(request, 'rango/profile_registration.html',
+                      {'user': user, 'user_profile_form': user_profile_form})
+
+
+@login_required
+def profile(request):
+    user = User.objects.get(id=request.user.id)
+    user_profile = UserProfile.objects.get(user_id=request.user.id)
+    return render(request, 'rango/profile.html', {'user': user, 'user_profile': user_profile})

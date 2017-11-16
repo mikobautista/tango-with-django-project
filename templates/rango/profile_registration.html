@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load bootstrap_toolkit %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block body_block %}
+
+<h2>Welcome to Rango, {{ user }}!</h2>
+<form role="form"  id="page_form" method="post" action="{% url 'register_profile' %}" enctype='multipart/form-data'>
+    {% csrf_token %}
+
+    {{ user_profile_form|as_bootstrap }}
+
+    <br/>
+    <button class="btn btn-primary" type="submit" name="submit">Update</button>
+</form>
+
+{% endblock %}
