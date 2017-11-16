@@ -11,7 +11,9 @@
 <div>
     <p><strong>Username:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
+    {% if user_profile.website %}
     <p><strong>Website:</strong> {{ user_profile.website }}</p>
+    {% endif %}
     {% if user_profile.picture %}
     <p><strong>Picture:</strong> <img src="../../media/{{ user_profile.picture }}" height="42" width="42"></p>
     {% endif %}

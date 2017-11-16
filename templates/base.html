@@ -32,18 +32,18 @@
         </div>
 
         <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="{% url 'about' %}">About</a></li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'users' %}">Users</a></li>
                 <li><a href="{% url 'profile' user.id %}">Profile</a></li>
-                <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
                 <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
-                <li><a href="{% url 'add_category' %}">Add a New Category</a></li>
                 {% else %}
                 <li><a href="{% url 'registration_register' %}">Register Here</a></li>
                 <li><a href="{% url 'auth_login' %}">Login</a></li>
                 {% endif %}
-                <li><a href="{% url 'about' %}">About</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

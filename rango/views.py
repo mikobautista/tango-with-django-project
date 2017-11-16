@@ -3,10 +3,9 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from rango.forms import CategoryForm, PageForm, UserProfileForm, UserForm
+from rango.forms import CategoryForm, PageForm, UserProfileForm
 from rango.models import Category, Page, UserProfile
 from rango.webhoseio_search import run_query
 
@@ -56,6 +55,7 @@ def about(request):
 
     # remember to include the visit data
     return render(request, 'rango/about.html', {'visits': count})
+
 
 @login_required
 def category(request, category_name_slug):
@@ -147,10 +147,6 @@ def add_page(request, category_name_slug):
 
     return render(request, 'rango/add_page.html', context_dict)
 
-
-@login_required
-def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
 
 @login_required
 def track_url(request):
