@@ -16,6 +16,10 @@ class Category(models.Model):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
+        # Prevent from having negative views
+        if self.views < 0:
+            self.views = 0
+
     def __unicode__(self):
         return self.name
 
